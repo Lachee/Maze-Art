@@ -294,7 +294,7 @@ public class MainGame{
 		for(int x = 0; x < width; x++) {
 			for(int y = 0; y < height; y++) {
 				Color color = new Color(0, 0, 0, drawGrid || solution.length != 0 ? 100 : lineAlpha);
-				maze.displayPoint(g, 0, 0, scale, new Point(x,y), color);
+				maze.displayPointOnlyWalls(g, 0, 0, scale, new Point(x,y), color);
 				
 			}
 		}
