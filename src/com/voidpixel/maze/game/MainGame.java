@@ -10,6 +10,7 @@ import com.voidpixel.maze.generation.MazeGenerator;
 import com.voidpixel.maze.interfaces.ColorHSV;
 import com.voidpixel.maze.main.Canvas;
 import com.voidpixel.maze.main.Program;
+import com.voidpixel.maze.pathfind.PathFinder;
 
 public class MainGame{
 	
@@ -48,6 +49,14 @@ public class MainGame{
 	public int emptyBlocks;
 	public int cbc = 0;
 	
+	//The maze's pathfinder
+	public PathFinder pathFinder;
+	public Point[] solution = new Point[0];
+	public int solutionCount = 0;
+	
+	//Artifiy Maze
+	public boolean artifyMaze = false;
+	
 	//The maze's color
 	public Color mazeColor = new Color(210, 210, 50);
 	
@@ -64,6 +73,8 @@ public class MainGame{
 	
 	public void createMap(int width, int height) {
 	
+		artifyMaze = false;
+		
 		lineAlpha = 255;
 		mazeColor = new ColorHSV(Math.random() * 360, 1.0, 1.0).GetColor();
 		
@@ -75,8 +86,9 @@ public class MainGame{
 		maze.generate();
 		maze.placeStartAndEnd();
 		map = maze.getMap();
-		
-		//canvas.setSize(width * 6, height * 6);
+
+		pathFinder = new PathFinder(map, new int[] { 0 }, maze.getStart(), maze.getEnd());
+		solution = new Point[0];
 		
 		pointsDug = new ArrayList<ColorPoint>();
 		miners = new ArrayList<Miner>();
@@ -130,6 +142,14 @@ public class MainGame{
 			frameCount = 0;
 		}
 				
+		if(solution.length != 0) {
+			if(solutionCount < solution.length)
+				solutionCount+=2;
+			
+			if(solutionCount > solution.length)
+				solutionCount = solution.length;
+		}
+		
 		if(!restartMine) {
 			if(instantMine) {
 				lineAlpha = 0;
@@ -144,7 +164,7 @@ public class MainGame{
 					lineAlpha--;
 			}
 			
-			stepMiners();
+			if(artifyMaze) stepMiners();
 		}else{
 			createMap(this.width, this.height);
 		}
@@ -217,6 +237,11 @@ public class MainGame{
 		}
 	}
 	
+	public void solveMaze() {
+		solutionCount = 0;
+		solution = pathFinder.pathfindNodes();
+	}
+	
 	public void render(Graphics g) {	
 		
 		if(!restartMine) {
@@ -229,11 +254,23 @@ public class MainGame{
 			}
 		}
 		
+
+		if(solution.length != 0) {
+			for(int i = 0; i < solutionCount; i++) {
+				maze.displayPointWithoutWalls(g, 0, 0, 10, solution[solution.length - 1 - i], Color.DARK_GRAY);
+			}
+			
+		}
+
+
+		maze.displayPointWithoutWalls(g, 0, 0, 10, maze.getStart(), Color.GREEN);
+		maze.displayPointWithoutWalls(g, 0, 0, 10, maze.getEnd(), Color.RED);
+		
 		for(int x = 0; x < width; x++) {
 			for(int y = 0; y < height; y++) {
-				Color color = new Color(0, 0, 0, lineAlpha);
+				Color color = new Color(0, 0, 0, solution.length != 0 ? 255 : lineAlpha);
 				
-				maze.displayPoint(g, 0, 0, 10, new Point(x,y), map[x][y] == 0 ? color : new Color(0,0,0,0));
+				maze.displayPointOnlyWalls(g, 0, 0, 10, new Point(x,y), color);
 			}
 		}
 		
@@ -261,6 +298,14 @@ public class MainGame{
 		
 		if(e.getKeyCode() == KeyEvent.VK_S) {
 			canvas.saveScreen();
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_O) {
+			artifyMaze = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_P) {
+			solveMaze();
 		}
 	}
 }

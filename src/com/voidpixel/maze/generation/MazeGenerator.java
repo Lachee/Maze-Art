@@ -40,6 +40,7 @@ public class MazeGenerator {
 
 	public int[][] getMap() { return map; }
 	
+	public Point getEnd() { return new Point(finishPos[0], finishPos[1]); }
 	public Point getStart() { return new Point(startPos[0], startPos[1]); }
 	
 	private void initialiser(int width, int height) {
@@ -227,6 +228,35 @@ public class MazeGenerator {
 		}
 	}
 	
+	public void displayPointOnlyWalls(Graphics g, int xOffset, int yOffset, int size, Point point, Color color) {
+		int x = point.x;
+		int y = point.y;
+		g.setColor(color);
+		
+		if(map[x][y] == 1) return;
+		
+		if (x % 2 == 0 && y % 2 == 0) {
+			//Dots in the middle... them biatches!
+			g.fillRect((x / 2) * (size + 1) + xOffset,
+					((mazeHeight * 2 - y) / 2) * (size + 1) + yOffset, 1, 1);
+		}
+		
+		if (x % 2 == 1 && y % 2 == 0) {
+			//Horizontal Wall
+			g.fillRect(((x - 1) / 2) * (size + 1) + 1 + xOffset,
+					((mazeHeight * 2 - y) / 2) * (size + 1) + yOffset, size, 1);
+		}
+		
+		
+		if (x % 2 == 0 && y % 2 == 1) {
+			//Vertical Wall
+			g.fillRect((x / 2) * (size + 1) + xOffset,
+					((mazeHeight * 2 - y - 1) / 2) * (size + 1) + 1 + yOffset,
+					1, size);
+		}
+		
+	}
+	
 	public void displayPointWithoutWalls(Graphics g, int xOffset, int yOffset, int size, Point point, Color color) {
 		int x = point.x;
 		int y = point.y;
@@ -238,6 +268,7 @@ public class MazeGenerator {
 					((mazeHeight * 2 - y - 1) / 2) * (size + 1) + 1 + yOffset - 1, //Y
 					size + 2, size + 2);
 		}
+		
 		
 	}
 	
