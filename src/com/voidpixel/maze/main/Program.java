@@ -98,7 +98,10 @@ public class Program extends JFrame implements Runnable {
 
 			// Update THEN render the game
 			update(delta);
-			render();
+			
+			//Skip render's if we are going to slow
+			if(framerate > 10)
+				render();
 
 			// Get the difference in time from the start time to now
 			// Also convert it into milliseconds so that sleep can use it

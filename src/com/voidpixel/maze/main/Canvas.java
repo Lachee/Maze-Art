@@ -20,8 +20,8 @@ public class Canvas extends JComponent{
 	
 	public Canvas(Program program){
 		this.program = program;
-		createScreen();
 		
+		createScreen();
 	}
 	
 	public void setSize(int width, int height) {
@@ -65,6 +65,16 @@ public class Canvas extends JComponent{
 	
 	public void createScreen() {
 		screen = this.createVolatileImage(getWidth(), getHeight());
+	}
+	
+	public int getScreenWidth() {
+		if(screen == null) return getWidth();
+		return screen.getWidth(null);
+	}
+	
+	public int getScreenHeight() { 
+		if(screen == null) return getWidth();
+		return screen.getHeight(null);
 	}
 
 	public void paintComponent(Graphics g) {

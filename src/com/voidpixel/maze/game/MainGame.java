@@ -54,6 +54,9 @@ public class MainGame{
 	public Point[] solution = new Point[0];
 	public int solutionCount = 0;
 	
+	//Save the screen
+	public boolean saveScreen = false;
+	
 	//Artifiy Maze
 	public boolean artifyMaze = false;
 	
@@ -66,11 +69,12 @@ public class MainGame{
 		this.program = program;
 		this.canvas = canvas;
 		
-		canvas.setSize(width / 2 * 10, height / 2 * 10);
-		
-		createMap(100, 100);
+		//canvas.setSize(width / 2 * 10, height / 2 * 10);
 	}
-	
+
+	public void createMap(double width, double height) {
+		createMap((int)Math.floor(width), (int)Math.floor(height));
+	}
 	public void createMap(int width, int height) {
 	
 		artifyMaze = false;
@@ -135,13 +139,15 @@ public class MainGame{
 		return true;
 	}
 	
-	public void update(double delta) {
+	public void update(double delta) {		
 		frameCount++;
 		if(frameCount >= program.framerate) {
 			secondFlash = !secondFlash;
 			frameCount = 0;
 		}
 				
+		if(maze == null) return;
+		
 		if(solution.length != 0) {
 			if(solutionCount < solution.length)
 				solutionCount+=2;
@@ -244,6 +250,18 @@ public class MainGame{
 	
 	public void render(Graphics g) {	
 		
+		if(maze == null) {
+			
+			double w = (double)(program.getWidth()) / 6.0 + 1;
+			double h = (double)(program.getHeight()) / 6.0;
+			
+			System.out.println("Initial Canvas Size: " + canvas.getScreenWidth() + ", " + canvas.getScreenHeight());
+			System.out.println("Initial Map Size: " + w + ", " + h);
+			createMap(w, h);
+			return;
+		}
+		
+		//The art
 		if(!restartMine) {
 			for(ColorPoint cp : pointsDug) {
 				double p = (double)(emptyBlocks - cp.colorCount) / (double)emptyBlocks;
@@ -255,20 +273,23 @@ public class MainGame{
 		}
 		
 
+		//the pathfind solution
 		if(solution.length != 0) {
 			for(int i = 0; i < solutionCount; i++) {
-				maze.displayPointWithoutWalls(g, 0, 0, 10, solution[solution.length - 1 - i], Color.DARK_GRAY);
+				maze.displayPointWithoutWalls(g, 0, 0, 10, solution[solution.length - 1 - i], new Color(50, 50, 50));
 			}
 			
 		}
 
 
-		maze.displayPointWithoutWalls(g, 0, 0, 10, maze.getStart(), Color.GREEN);
-		maze.displayPointWithoutWalls(g, 0, 0, 10, maze.getEnd(), Color.RED);
+		//The start and end
+		maze.displayPointWithoutWalls(g, 0, 0, 10, maze.getStart(), new Color(0, 255, 0, solution.length != 0 ? 255 : lineAlpha));
+		maze.displayPointWithoutWalls(g, 0, 0, 10, maze.getEnd(), new Color(255, 0, 0, solution.length != 0 ? 255 : lineAlpha));
 		
+		//The Walls
 		for(int x = 0; x < width; x++) {
 			for(int y = 0; y < height; y++) {
-				Color color = new Color(0, 0, 0, solution.length != 0 ? 255 : lineAlpha);
+				Color color = new Color(0, 0, 0, drawGrid || solution.length != 0 ? 100 : lineAlpha);
 				
 				maze.displayPointOnlyWalls(g, 0, 0, 10, new Point(x,y), color);
 			}
@@ -276,6 +297,7 @@ public class MainGame{
 		
 		
 		/*
+		//Display the miners at work
 		for(Miner jimbo : miners) {
 			int x = jimbo.x;
 			int y = jimbo.y;
@@ -284,6 +306,11 @@ public class MainGame{
 		}
 		*/
 		
+		//Only save the screen once it ahs finished rendering
+		if(saveScreen) {
+			saveScreen = false;
+			canvas.saveScreen();
+		}
 		
 	}
 	
@@ -297,7 +324,7 @@ public class MainGame{
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_S) {
-			canvas.saveScreen();
+			saveScreen = true;
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_O) {
@@ -307,5 +334,8 @@ public class MainGame{
 		if(e.getKeyCode() == KeyEvent.VK_P) {
 			solveMaze();
 		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_G)
+			drawGrid = !drawGrid;
 	}
 }
