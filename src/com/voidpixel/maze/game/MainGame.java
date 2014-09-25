@@ -61,9 +61,7 @@ public class MainGame{
 	}
 	
 	public void createMap(int width, int height) {
-		width += 1;
-		height += 1;
-		
+	
 		lineAlpha = 255;
 		mazeColor = new ColorHSV(Math.random() * 360, 1.0, 1.0).GetColor();
 		
@@ -75,6 +73,8 @@ public class MainGame{
 		maze.generate();
 		maze.placeStartAndEnd();
 		map = maze.getMap();
+		
+		canvas.setSize(width / 2 * 10, height / 2 * 10);
 		
 		pointsDug = new ArrayList<ColorPoint>();
 		miners = new ArrayList<Miner>();

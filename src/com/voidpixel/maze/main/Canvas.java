@@ -24,6 +24,11 @@ public class Canvas extends JComponent{
 		
 	}
 	
+	public void setSize(int width, int height) {
+		program.setSize(width, height);
+		
+	}
+	
 	public void saveScreen() {
 
 	    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy-HH-mm-ss-SS");
