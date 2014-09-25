@@ -280,15 +280,15 @@ public class MainGame{
 		//the pathfind solution
 		if(solution.length != 0) {
 			for(int i = 0; i < solutionCount; i++) {
-				maze.displayPointWithoutWalls(g, 0, 0, 10, solution[solution.length - 1 - i], new Color(50, 50, 50));
+				maze.displayPointWithoutWalls(g, 0, 0, scale, solution[solution.length - 1 - i], new Color(50, 50, 50));
 			}
 			
 		}
 
 
 		//The start and end
-		maze.displayPointWithoutWalls(g, 0, 0, 10, maze.getStart(), new Color(0, 255, 0, solution.length != 0 ? 255 : lineAlpha));
-		maze.displayPointWithoutWalls(g, 0, 0, 10, maze.getEnd(), new Color(255, 0, 0, solution.length != 0 ? 255 : lineAlpha));
+		maze.displayPointWithoutWalls(g, 0, 0, scale, maze.getStart(), new Color(0, 255, 0, solution.length != 0 ? 255 : lineAlpha));
+		maze.displayPointWithoutWalls(g, 0, 0, scale, maze.getEnd(), new Color(255, 0, 0, solution.length != 0 ? 255 : lineAlpha));
 		
 		//The Walls
 		for(int x = 0; x < width; x++) {
