@@ -57,6 +57,8 @@ public class MainGame{
 		this.program = program;
 		this.canvas = canvas;
 		
+		canvas.setSize(width / 2 * 10, height / 2 * 10);
+		
 		createMap(100, 100);
 	}
 	
@@ -74,7 +76,7 @@ public class MainGame{
 		maze.placeStartAndEnd();
 		map = maze.getMap();
 		
-		canvas.setSize(width / 2 * 10, height / 2 * 10);
+		//canvas.setSize(width / 2 * 10, height / 2 * 10);
 		
 		pointsDug = new ArrayList<ColorPoint>();
 		miners = new ArrayList<Miner>();
