@@ -27,6 +27,9 @@ public class MainGame{
 	public boolean secondFlash = false;
 	public boolean drawGrid = false;
 	
+	public boolean restartMine = false;
+	public boolean instantMine = false;
+	
 	public int width = 101;
 	public int height = 101;
 	
@@ -34,10 +37,10 @@ public class MainGame{
 	public int[][] map;
 	
 	//All points dug by miners
-	ArrayList<ColorPoint> pointsDug = new ArrayList<ColorPoint>(); 
+	ArrayList<ColorPoint> pointsDug; 
 	
 	//The miners digging the maze
-	ArrayList<Miner> miners = new ArrayList<Miner>();
+	ArrayList<Miner> miners;
 	
 	//The amount of empty blocks
 	public int emptyBlocks;
@@ -48,11 +51,25 @@ public class MainGame{
 		
 		this.program = program;
 		this.canvas = canvas;
-		maze = new MazeGenerator((width) / 2, (height) / 2);
+		
+		createMap(100, 100);
+	}
+	
+	public void createMap(int width, int height) {
+		width += 1;
+		height += 1;
+		
+		this.width = width;
+		this.height = height;
+		
+		maze = new MazeGenerator((this.width) / 2, (this.height) / 2);
 		
 		maze.generate();
 		maze.placeStartAndEnd();
 		map = maze.getMap();
+		
+		pointsDug = new ArrayList<ColorPoint>();
+		miners = new ArrayList<Miner>();
 		
 		int i = 0;
 		for(int x = 0; x < width; x++) {
@@ -82,6 +99,8 @@ public class MainGame{
 		//Jim is a person too!
 		Miner jim = new Miner(sx, sy, dx, dy);
 		miners.add(jim);
+		
+		restartMine = false;
 	}
 	
 	public boolean emptySpace(int x, int y) {
@@ -100,10 +119,15 @@ public class MainGame{
 			secondFlash = !secondFlash;
 			frameCount = 0;
 		}
-		
-		
-		for(int i = 0; i < 1; i++)
+				
+		if(!restartMine) {
+			while(instantMine && miners.size() > 0)
+				stepMiners();
+					
 			stepMiners();
+		}else{
+			createMap(this.width, this.height);
+		}
 	}
 	
 	public void stepMiners() {
@@ -115,15 +139,28 @@ public class MainGame{
 		for(Miner oldBuddyJim : miners) {
 
 			cbc += 2;
-			
-			pointsDug.add(new ColorPoint(oldBuddyJim.x, oldBuddyJim.y, cbc));
-			pointsDug.add(new ColorPoint(oldBuddyJim.x - oldBuddyJim.dx, oldBuddyJim.y - oldBuddyJim.dy, cbc));
-			
+
 			int x = oldBuddyJim.x;
 			int y = oldBuddyJim.y;
-		
+
 			int dx = oldBuddyJim.dx;
 			int dy = oldBuddyJim.dy;
+			
+			//Where we are
+			pointsDug.add(new ColorPoint(x, y, cbc));
+			
+			//Where we have been
+			//pointsDug.add(new ColorPoint(x - dx, y - dy, cbc));
+			
+			//Every side!
+			//up - down
+			pointsDug.add(new ColorPoint(x, y-1, cbc));
+			pointsDug.add(new ColorPoint(x, y+1, cbc));
+			
+			//left - right
+			pointsDug.add(new ColorPoint(x - 1, y, cbc));
+			pointsDug.add(new ColorPoint(x + 1, y, cbc));
+		
 			
 			if (dx == 0) {
 				//Check in x direction
@@ -155,6 +192,7 @@ public class MainGame{
 		miners.removeAll(deadJims);
 		
 		if(miners.size() == 0) {
+			instantMine = false;
 			System.out.println("Finished Trace. cbc: " + cbc + " emptyBlocks: " + emptyBlocks);
 		}
 	}
@@ -163,7 +201,7 @@ public class MainGame{
 		
 		for(int x = 0; x < width; x++) {
 			for(int y = 0; y < height; y++) {
-				maze.displayPoint(g, 0, 0, 10, new Point(x,y), map[x][y] == 0 ? Color.black : Color.white);
+				//maze.displayPoint(g, 0, 0, 10, new Point(x,y), map[x][y] == 0 ? Color.black : Color.white);
 			}
 		}
 		
@@ -176,17 +214,25 @@ public class MainGame{
 		}
 		*/
 		
-		for(ColorPoint cp : pointsDug) {
-			double p = (double)cp.colorCount / (double)emptyBlocks;
-
-			
-			Color c = new Color((int)(255 * p), 0, 0);
-			maze.displayPoint(g, 0, 0, 10, new Point(cp.x, cp.y), c);
+		if(!restartMine) {
+			for(ColorPoint cp : pointsDug) {
+				double p = (double)(emptyBlocks - cp.colorCount) / (double)emptyBlocks;
+	
+				
+				Color c = new Color((int)(255 * p), 0, 0);
+				maze.displayPoint(g, 0, 0, 10, new Point(cp.x, cp.y), c);
+			}
 		}
 	}
 	
 	public void keyReleased(KeyEvent e) {
-		stepMiners();
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			instantMine = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_R) {
+			restartMine = true;
+		}
 	}
 	
 	public void keyMoved(KeyEvent e) {
