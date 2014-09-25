@@ -2,7 +2,14 @@ package com.voidpixel.maze.main;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 public class Canvas extends JComponent{
@@ -15,6 +22,40 @@ public class Canvas extends JComponent{
 		this.program = program;
 		createScreen();
 		
+	}
+	
+	public void saveScreen() {
+
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy-HH-mm-ss-SS");
+	    Date now = new Date(System.currentTimeMillis());
+		String path = "Maze-Generation-" + sdf.format(now) + ".png";
+		
+	    
+		saveScreen("bin/gens/" + path);
+	}
+	
+	public void saveScreen(String path) {
+		this.setName("Lachee's Tile Dungeon Algorithm - saving image...");
+		try {
+			long startTime = System.nanoTime();
+			System.out.println("Drawing Image before save...");
+			
+			BufferedImage image = new BufferedImage(screen.getWidth(null), screen.getHeight(null), BufferedImage.TYPE_INT_RGB);
+			image.getGraphics().drawImage(screen, 0, 0, screen.getWidth(null), screen.getHeight(null), null);
+			
+			File file =  new File(path);
+			file.mkdirs();
+			
+			System.out.println("Attempting to save \"" + file.getAbsolutePath() +"\"");
+			
+			ImageIO.write((RenderedImage)image, "png", file);
+			
+			System.out.println("File \"" + file.getAbsolutePath() + "\" saved");
+			System.out.println("Done in " + ((double)(System.nanoTime() - startTime)/1e9) + "s");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.setName("Lachee's Tile Dungeon Algorithm");
 	}
 	
 	public void createScreen() {

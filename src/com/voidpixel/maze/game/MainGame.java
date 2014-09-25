@@ -235,6 +235,7 @@ public class MainGame{
 			}
 		}
 		
+		
 		/*
 		for(Miner jimbo : miners) {
 			int x = jimbo.x;
@@ -254,6 +255,10 @@ public class MainGame{
 		
 		if(e.getKeyCode() == KeyEvent.VK_R) {
 			restartMine = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_S) {
+			canvas.saveScreen();
 		}
 	}
 	
