@@ -32,6 +32,7 @@ public class MainGame{
 	
 	public int width = 101;
 	public int height = 101;
+	public int scale = 10;
 	
 	public int lineAlpha = 255;
 	
@@ -51,15 +52,16 @@ public class MainGame{
 	//The maze's color
 	public Color mazeColor = new Color(210, 210, 50);
 	
-	public MainGame(Program program, Canvas canvas) {
+	public MainGame(Program program, Canvas canvas, int width, int height, int scale) {
 		MainGame.instance = this;
 		
 		this.program = program;
 		this.canvas = canvas;
+		this.width = width;
+		this.height = height;
+		this.scale = scale;
 		
-		canvas.setSize(width / 2 * 10, height / 2 * 10);
-		
-		createMap(100, 100);
+		createMap(this.width, this.height);
 	}
 	
 	public void createMap(int width, int height) {
@@ -75,8 +77,6 @@ public class MainGame{
 		maze.generate();
 		maze.placeStartAndEnd();
 		map = maze.getMap();
-		
-		//canvas.setSize(width * 6, height * 6);
 		
 		pointsDug = new ArrayList<ColorPoint>();
 		miners = new ArrayList<Miner>();
@@ -225,7 +225,7 @@ public class MainGame{
 	
 				
 				Color c = new Color((int)(mazeColor.getRed() * p), (int)(mazeColor.getGreen() * p), (int)(mazeColor.getBlue() * p));
-				maze.displayPointWithoutWalls(g, 0, 0, 10, new Point(cp.x, cp.y), c);
+				maze.displayPointWithoutWalls(g, 0, 0, scale, new Point(cp.x, cp.y), c);
 			}
 		}
 		
@@ -233,7 +233,7 @@ public class MainGame{
 			for(int y = 0; y < height; y++) {
 				Color color = new Color(0, 0, 0, lineAlpha);
 				
-				maze.displayPoint(g, 0, 0, 10, new Point(x,y), map[x][y] == 0 ? color : new Color(0,0,0,0));
+				maze.displayPoint(g, 0, 0, scale, new Point(x,y), map[x][y] == 0 ? color : new Color(0,0,0,0));
 			}
 		}
 		
