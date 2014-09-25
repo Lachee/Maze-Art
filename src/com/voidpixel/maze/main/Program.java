@@ -9,8 +9,6 @@ public class Program extends JFrame implements Runnable {
 	private static final long serialVersionUID = 1L;
 	// THIS IS A COMMENT
 	public static int TARGET_FRAMERATE = 60;
-	public static int WIDTH = 1024;
-	public static int HEIGHT = 600;
 	public static String TITLE = "Village";
 
 	public int framerate = 60;
@@ -21,6 +19,11 @@ public class Program extends JFrame implements Runnable {
 	public Listener listener;
 	public Canvas canvas;
 	public MainGame game;
+	
+	//Moved this in here so the app starts at the right size	
+	public static int mazeWidth = 101;
+	public static int mazeHeight = 101;
+	public static int mazeScale = 10;
 
 	public Program(String title) {
 		super(title + ": LOADING");
@@ -30,7 +33,7 @@ public class Program extends JFrame implements Runnable {
 		canvas = new Canvas(this);
 		this.setContentPane(canvas);
 
-		game = new MainGame(this, canvas);
+		game = new MainGame(this, canvas, mazeWidth, mazeHeight, mazeScale);
 
 		listener = new Listener(this);
 		this.addKeyListener(listener);
@@ -44,7 +47,8 @@ public class Program extends JFrame implements Runnable {
 
 		
 		Program program = new Program("Maze Art");
-		program.setSize(WIDTH, HEIGHT);
+		//The following setSize parameters took A LOT of working out
+		program.setSize((mazeWidth/2)*(mazeScale + 1) + 17, (mazeHeight/2)*(mazeScale + 1) + 40);
 		program.setLocationRelativeTo(null);
 		program.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		program.setVisible(true);
