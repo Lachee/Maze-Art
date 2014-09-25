@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import com.voidpixel.maze.generation.MazeGenerator;
-import com.voidpixel.maze.interfaces.*;
 import com.voidpixel.maze.main.Canvas;
 import com.voidpixel.maze.main.Program;
 
@@ -33,6 +32,8 @@ public class MainGame{
 	public int width = 101;
 	public int height = 101;
 	
+	public int lineAlpha = 255;
+	
 	MazeGenerator maze;
 	public int[][] map;
 	
@@ -46,6 +47,9 @@ public class MainGame{
 	public int emptyBlocks;
 	public int cbc = 0;
 	
+	//The maze's color
+	public Color mazeColor = new Color(210, 210, 50);
+	
 	public MainGame(Program program, Canvas canvas) {
 		MainGame.instance = this;
 		
@@ -58,6 +62,8 @@ public class MainGame{
 	public void createMap(int width, int height) {
 		width += 1;
 		height += 1;
+		
+		lineAlpha = 255;
 		
 		this.width = width;
 		this.height = height;
@@ -121,9 +127,19 @@ public class MainGame{
 		}
 				
 		if(!restartMine) {
-			while(instantMine && miners.size() > 0)
-				stepMiners();
-					
+			if(instantMine) {
+				lineAlpha = 0;
+				while(instantMine && miners.size() > 0)
+					stepMiners();
+			}
+			
+			if(((double)cbc / (double)emptyBlocks) < 0.75) {
+				lineAlpha = 255;
+			}else{
+				if(lineAlpha != 0)
+					lineAlpha--;
+			}
+			
 			stepMiners();
 		}else{
 			createMap(this.width, this.height);
@@ -197,11 +213,23 @@ public class MainGame{
 		}
 	}
 	
-	public void render(Graphics g) {			
+	public void render(Graphics g) {	
+		
+		if(!restartMine) {
+			for(ColorPoint cp : pointsDug) {
+				double p = (double)(emptyBlocks - cp.colorCount) / (double)emptyBlocks;
+	
+				
+				Color c = new Color((int)(mazeColor.getRed() * p), (int)(mazeColor.getGreen() * p), (int)(mazeColor.getBlue() * p));
+				maze.displayPointWithoutWalls(g, 0, 0, 10, new Point(cp.x, cp.y), c);
+			}
+		}
 		
 		for(int x = 0; x < width; x++) {
 			for(int y = 0; y < height; y++) {
-				//maze.displayPoint(g, 0, 0, 10, new Point(x,y), map[x][y] == 0 ? Color.black : Color.white);
+				Color color = new Color(0, 0, 0, lineAlpha);
+				
+				maze.displayPoint(g, 0, 0, 10, new Point(x,y), map[x][y] == 0 ? color : new Color(0,0,0,0));
 			}
 		}
 		
@@ -214,15 +242,7 @@ public class MainGame{
 		}
 		*/
 		
-		if(!restartMine) {
-			for(ColorPoint cp : pointsDug) {
-				double p = (double)(emptyBlocks - cp.colorCount) / (double)emptyBlocks;
-	
-				
-				Color c = new Color((int)(255 * p), 0, 0);
-				maze.displayPoint(g, 0, 0, 10, new Point(cp.x, cp.y), c);
-			}
-		}
+		
 	}
 	
 	public void keyReleased(KeyEvent e) {

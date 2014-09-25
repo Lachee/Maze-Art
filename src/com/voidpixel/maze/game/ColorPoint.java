@@ -6,5 +6,6 @@ public class ColorPoint {
 		this.x = x;
 		this.y = y;
 		this.colorCount = colorCount;
+		
 	}
 }

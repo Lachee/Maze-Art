@@ -15,3 +15,4 @@ public class Miner {
 		this.dy = dy;
 	}
 }
+

@@ -42,6 +42,7 @@ public class Program extends JFrame implements Runnable {
 	public static void main(String[] args) {
 		System.out.println("Loading Program...");
 
+		
 		Program program = new Program("Maze Art");
 		program.setSize(WIDTH, HEIGHT);
 		program.setLocationRelativeTo(null);
