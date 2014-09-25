@@ -57,7 +57,7 @@ public class MainGame{
 		this.program = program;
 		this.canvas = canvas;
 		
-		createMap(100, 100);
+		createMap(101, 101);
 	}
 	
 	public void createMap(int width, int height) {
@@ -74,7 +74,7 @@ public class MainGame{
 		maze.placeStartAndEnd();
 		map = maze.getMap();
 		
-		canvas.setSize(width / 2 * 10, height / 2 * 10);
+		canvas.setSize(width * 6, height * 6);
 		
 		pointsDug = new ArrayList<ColorPoint>();
 		miners = new ArrayList<Miner>();
@@ -261,11 +261,4 @@ public class MainGame{
 			canvas.saveScreen();
 		}
 	}
-	
-	public void keyMoved(KeyEvent e) {
-	}
-	
-	public void keyClaim(KeyEvent e) {
-	}
-	
 }
