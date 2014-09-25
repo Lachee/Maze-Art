@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 
 # Eclipse stuffs
 bin/
+=======
+# Eclipse stuffs
+/bin
+/bin/
+>>>>>>> origin/master
 
 # Windows image file caches
 Thumbs.db
