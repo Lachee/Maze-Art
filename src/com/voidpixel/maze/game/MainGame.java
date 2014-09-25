@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import com.voidpixel.maze.generation.MazeGenerator;
+import com.voidpixel.maze.interfaces.ColorHSV;
 import com.voidpixel.maze.main.Canvas;
 import com.voidpixel.maze.main.Program;
 
@@ -64,6 +65,7 @@ public class MainGame{
 		height += 1;
 		
 		lineAlpha = 255;
+		mazeColor = new ColorHSV(Math.random() * 360, 1.0, 1.0).GetColor();
 		
 		this.width = width;
 		this.height = height;
