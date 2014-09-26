@@ -61,6 +61,9 @@ public class MainGame{
 	//Artifiy Maze
 	public boolean artifyMaze = false;
 	
+	//Automatic? For prittyness
+	public boolean automatic = false;
+	
 	//The maze's color
 	public Color mazeColor = new Color(210, 210, 50);
 	
@@ -148,6 +151,11 @@ public class MainGame{
 		if(frameCount >= program.framerate) {
 			secondFlash = !secondFlash;
 			frameCount = 0;
+			
+			if(automatic && miners.size() == 0 && cbc == emptyBlocks && secondFlash) {
+				createMap(this.width, this.height);
+				artifyMaze = true;
+			}
 		}
 				
 		if(maze == null) return;
