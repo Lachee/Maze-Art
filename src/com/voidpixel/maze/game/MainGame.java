@@ -307,8 +307,10 @@ public class MainGame{
 
 
 		//The start and end
-		maze.displayPointWithoutWalls(g, 0, 0, scale, maze.getStart(), new Color(0, 255, 0, solution.length != 0 ? 255 : lineAlpha));
-		maze.displayPointWithoutWalls(g, 0, 0, scale, maze.getEnd(), new Color(255, 0, 0, solution.length != 0 ? 255 : lineAlpha));
+		if(!record) {
+			maze.displayPointWithoutWalls(g, 0, 0, scale, maze.getStart(), new Color(0, 255, 0, solution.length != 0 ? 255 : lineAlpha));
+			maze.displayPointWithoutWalls(g, 0, 0, scale, maze.getEnd(), new Color(255, 0, 0, solution.length != 0 ? 255 : lineAlpha));
+		}
 		
 		//The Walls
 		for(int x = 0; x < width; x++) {
