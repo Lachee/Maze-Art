@@ -256,8 +256,10 @@ public class MainGame{
 	}
 	
 	public void solveMaze() {
+		long stime = System.nanoTime();
 		solutionCount = 0;
 		solution = pathFinder.pathfindNodes();
+		System.out.println("Done solving in "+((double)(System.nanoTime()-stime)/1e9)+"s");
 	}
 	
 	public void render(Graphics g) {	
@@ -331,6 +333,7 @@ public class MainGame{
 		
 		if(e.getKeyCode() == KeyEvent.VK_Q) {
 			automatic = !automatic;
+			System.out.println("automatic is set to "+automatic);
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_R) {
