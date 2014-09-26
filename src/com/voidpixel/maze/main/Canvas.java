@@ -12,11 +12,16 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
+import com.fmsware.gif.AnimatedGifEncoder;
+
 public class Canvas extends JComponent{
 	private static final long serialVersionUID = 1L;
 
 	public Program program;
 	public Image screen;
+	
+	protected boolean encodeGIF = false;
+	public AnimatedGifEncoder gifEncoder;
 	
 	public Canvas(Program program){
 		this.program = program;
@@ -92,8 +97,51 @@ public class Canvas extends JComponent{
 		//g.setXORMode(Color.black);
 		g.drawImage(screen, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
+		
+		if(encodeGIF && gifEncoder != null) {
+			
+			saveFrameGIF();
+			
+		}
 	}
 	
+	public void recordGIF() {
+		gifEncoder = new AnimatedGifEncoder();
+		encodeGIF = true;
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy-HH-mm-ss-SS");
+	    Date now = new Date(System.currentTimeMillis());
+		String path = "bin/gens/ani/Maze-Generation-" + sdf.format(now) + ".gif";
+		
+
+		System.out.println("Recording .gif to " + path);
+		gifEncoder.start(path);
+		gifEncoder.setRepeat(0);
+	}
+	
+	public void saveFrameGIF() {
+
+		BufferedImage image = new BufferedImage(screen.getWidth(null), screen.getHeight(null), BufferedImage.TYPE_INT_RGB);
+		image.getGraphics().drawImage(screen, 0, 0, screen.getWidth(null), screen.getHeight(null), null);
+		
+		gifEncoder.setFrameRate(Program.TARGET_FRAMERATE);
+		gifEncoder.addFrame(image);
+		
+	}
+	
+	public void finishGIF() {
+		encodeGIF = false;
+		System.out.println("Ending and saving .gif...");
+		long sTime = System.nanoTime();
+		if(gifEncoder != null) gifEncoder.finish();
+		gifEncoder = null;	
+		System.out.println("Saved .gif in " + ((double)(System.nanoTime() - sTime) / 1e9) + "s");
+	}
+	
+	public void toggleGIF() {
+		if(gifEncoder == null) return;
+		encodeGIF = !encodeGIF;
+	}
 
 	public static void drawCircle(Graphics g, int x, int y, int radius) {
 		g.drawOval(x - radius, y - radius, radius * 2, radius * 2);

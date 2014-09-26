@@ -21,9 +21,9 @@ public class Program extends JFrame implements Runnable {
 	public MainGame game;
 	
 	//Moved this in here so the app starts at the right size	
-	public static int mazeWidth = 1201;
-	public static int mazeHeight = 601;
-	public static int mazeScale = 1;
+	public static int mazeWidth = 101;
+	public static int mazeHeight = 101;
+	public static int mazeScale = 10;
 
 	public Program(String title) {
 		super(title + ": LOADING");
@@ -104,7 +104,7 @@ public class Program extends JFrame implements Runnable {
 			update(delta);
 			
 			//Skip render's if we are going to slow
-			if(framerate > 10)
+			//if(framerate > 10)
 				render();
 
 			// Get the difference in time from the start time to now

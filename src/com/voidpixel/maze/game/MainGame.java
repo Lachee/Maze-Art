@@ -64,6 +64,9 @@ public class MainGame{
 	//Automatic? For prittyness
 	public boolean automatic = false;
 	
+	//Are we recording this as a gif?
+	public boolean record = false;
+	
 	//The maze's color
 	public Color mazeColor = new Color(210, 210, 50);
 	
@@ -83,7 +86,7 @@ public class MainGame{
 	}
 	
 	public void createMap(int width, int height) {
-	
+		
 		artifyMaze = false;
 		
 		lineAlpha = 255;
@@ -134,6 +137,9 @@ public class MainGame{
 		miners.add(jim);
 		
 		restartMine = false;
+		
+		if(record)
+			canvas.recordGIF();
 	}
 	
 	public boolean emptySpace(int x, int y) {
@@ -151,6 +157,10 @@ public class MainGame{
 		if(frameCount >= program.framerate) {
 			secondFlash = !secondFlash;
 			frameCount = 0;
+			
+			if(miners.size() == 0 && cbc == emptyBlocks && record) {
+				canvas.finishGIF(); 
+			}
 			
 			if(automatic && miners.size() == 0 && cbc == emptyBlocks && secondFlash) {
 				createMap(this.width, this.height);
@@ -183,6 +193,8 @@ public class MainGame{
 			}
 			
 			if(artifyMaze) stepMiners();
+			
+			
 		}else{
 			createMap(this.width, this.height);
 		}
@@ -338,6 +350,17 @@ public class MainGame{
 		
 		if(e.getKeyCode() == KeyEvent.VK_R) {
 			restartMine = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_T){
+			//Toggle the record boolean
+			record = !record;
+			
+			//If we are stopping recording, but the canvas is in the middle of a recording, end it.
+			if(record == false && canvas.gifEncoder != null)
+				canvas.finishGIF();
+			
+			System.out.println("record is set to "+record + ". Will not apply untill next map.");
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_S) {
