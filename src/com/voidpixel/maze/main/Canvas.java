@@ -39,7 +39,15 @@ public class Canvas extends JComponent{
 	    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy-HH-mm-ss-SS");
 	    Date now = new Date(System.currentTimeMillis());
 		String path = "Maze-Generation-" + sdf.format(now) + ".png";
-		
+	    
+		saveScreen("bin/gens/" + path);
+	}
+	
+	public void saveScreen(long seed, int width, int height) {
+
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy-HH-mm-ss-SS");
+	    Date now = new Date(System.currentTimeMillis());
+		String path = "Maze-Generation-" + sdf.format(now) +"_seed=" + seed + "_w=" + width + "_h=" + height + ".png";
 	    
 		saveScreen("bin/gens/" + path);
 	}

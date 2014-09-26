@@ -39,6 +39,7 @@ public class MazeGenerator {
 	}
 
 	public int[][] getMap() { return map; }
+	public long getSeed() {return randomSeed;}
 	
 	public Point getEnd() { return new Point(finishPos[0], finishPos[1]); }
 	public Point getStart() { return new Point(startPos[0], startPos[1]); }

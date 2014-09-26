@@ -335,7 +335,7 @@ public class MainGame{
 		//Only save the screen once it ahs finished rendering
 		if(saveScreen) {
 			saveScreen = false;
-			canvas.saveScreen();
+			canvas.saveScreen(maze.getSeed(), width, height);
 		}
 		
 	}
