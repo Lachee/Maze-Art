@@ -264,12 +264,10 @@ public class MainGame{
 		
 		if(maze == null) {
 			
-			double w = (double)(program.getWidth()) / 6.0 + 1;
-			double h = (double)(program.getHeight()) / 6.0;
+			program.setSize((width/2)*(scale + 1) + 17, (height/2)*(scale + 1) + 40);
 			
-			System.out.println("Initial Canvas Size: " + canvas.getScreenWidth() + ", " + canvas.getScreenHeight());
-			System.out.println("Initial Map Size: " + w + ", " + h);
-			createMap(w, h);
+			createMap(width, height);
+			
 			return;
 		}
 		
@@ -329,6 +327,10 @@ public class MainGame{
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 			instantMine = true;
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_Q) {
+			automatic = !automatic;
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_R) {
