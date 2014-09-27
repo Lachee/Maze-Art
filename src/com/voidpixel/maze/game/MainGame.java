@@ -31,6 +31,8 @@ public class MainGame{
 	public boolean restartMine = false;
 	public boolean instantMine = false;
 	
+	public boolean pathfinding = false;
+	
 	public int width = 101;
 	public int height = 101;
 	public int scale = 10;
@@ -268,10 +270,12 @@ public class MainGame{
 	}
 	
 	public void solveMaze() {
+		pathfinding = true;
 		long stime = System.nanoTime();
 		solutionCount = 0;
 		solution = pathFinder.pathfindNodes();
 		System.out.println("Done solving in "+((double)(System.nanoTime()-stime)/1e9)+"s");
+		pathfinding = false;
 	}
 	
 	public void render(Graphics g) {	
@@ -341,7 +345,7 @@ public class MainGame{
 	}
 	
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+		if(!pathfinding && e.getKeyCode() == KeyEvent.VK_SPACE) {
 			instantMine = true;
 		}
 		
