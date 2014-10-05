@@ -58,8 +58,8 @@ public class Canvas extends JComponent{
 			long startTime = System.nanoTime();
 			System.out.println("Drawing Image before save...");
 			
-			BufferedImage image = new BufferedImage(screen.getWidth(null), screen.getHeight(null), BufferedImage.TYPE_INT_RGB);
-			image.getGraphics().drawImage(screen, 0, 0, screen.getWidth(null), screen.getHeight(null), null);
+			BufferedImage image = new BufferedImage(screen.getWidth(null), screen.getHeight(null)-1, BufferedImage.TYPE_INT_RGB);
+			image.getGraphics().drawImage(screen, 0, 0, screen.getWidth(null), screen.getHeight(null)-1, null);
 			
 			File file =  new File(path);
 			file.mkdirs();
