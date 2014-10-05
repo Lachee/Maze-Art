@@ -48,7 +48,7 @@ public class Canvas extends JComponent{
 	    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy-HH-mm-ss-SS");
 	    Date now = new Date(System.currentTimeMillis());
 		String path = "Maze-Generation-" + sdf.format(now) +"_seed=" + seed + "_w=" + width + "_h=" + height + ".png";
-	    
+	
 		saveScreen("bin/gens/" + path);
 	}
 	
@@ -59,7 +59,7 @@ public class Canvas extends JComponent{
 			System.out.println("Drawing Image before save...");
 			
 			BufferedImage image = new BufferedImage(screen.getWidth(null), screen.getHeight(null)-1, BufferedImage.TYPE_INT_RGB);
-			image.getGraphics().drawImage(screen, 0, 0, screen.getWidth(null), screen.getHeight(null)-1, null);
+			image.getGraphics().drawImage(screen, 0, 0, screen.getWidth(null), screen.getHeight(null), null);
 			
 			File file =  new File(path);
 			file.mkdirs();
