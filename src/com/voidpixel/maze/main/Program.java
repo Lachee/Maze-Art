@@ -34,7 +34,7 @@ public class Program extends JFrame implements Runnable {
 		this.setContentPane(canvas);
 
 		game = new MainGame(this, canvas, mazeWidth, mazeHeight, mazeScale);
-
+		
 		listener = new Listener(this);
 		this.addKeyListener(listener);
 		
